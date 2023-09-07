@@ -48,7 +48,6 @@ const ShareTweet = () => {
         comments: [],
       };
 
-
       // Check if a file is selected
       if (file) {
         const storageRef = ref(storage, "tweet_files/" + file.name);
@@ -63,12 +62,12 @@ const ShareTweet = () => {
         document.getElementById("fileInput").value = "";
       }
 
-        // Add the tweet to Firestore
-        await addDoc(docRef, tweetData);
+      // Add the tweet to Firestore
+      await addDoc(docRef, tweetData);
 
-        setTweet("");
-        setImagePreview(null);
-        setFile(null);
+      setTweet("");
+      setImagePreview(null);
+      setFile(null);
 
       console.log("Tweet uploaded successfully.");
     } catch (error) {
@@ -97,14 +96,18 @@ const ShareTweet = () => {
         </div>
       </div>
       <div>
+        <div>
+          {imagePreview && (
+            <img
+              src={imagePreview}
+              alt="Preview"
+              className=" w-8/12 h-1/2 p-5 pl-20 rounded-xl"
+            />
+          )}
+        </div>
         <div className="flex justify-between gap-4 items-center border-b-[1px] py-3 pl-20 pr-5 border-slate-600">
           <div className="flex gap-4">
-            <input
-              id="fileInput"
-              type="file"
-              className="w-7/12"
-              onChange={handleFileChange}
-            />
+            <input id="fileInput" type="file" onChange={handleFileChange} />
           </div>
           <div
             onClick={handleTweet}
@@ -112,15 +115,6 @@ const ShareTweet = () => {
           >
             Post
           </div>
-        </div>
-        <div>
-          {imagePreview && (
-            <img
-              src={imagePreview}
-              alt="Preview"
-              className=" w-1/2 h-1/2 p-5 rounded-xl"
-            />
-          )}
         </div>
       </div>
     </div>

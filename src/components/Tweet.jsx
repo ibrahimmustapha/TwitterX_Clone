@@ -12,9 +12,9 @@ import { db } from "../firebase";
 
 const Tweet = (props) => {
   const handleLikes = async () => {
-    const ref = doc(collection(db, "tweets"));
+    const ref = doc(collection(db, "tweets"), props.uid);
     await updateDoc(ref, {
-      likes: increment(1),
+      like: increment(1),
     });
   };
   return (
@@ -33,20 +33,20 @@ const Tweet = (props) => {
             </div>
           </div>
           <div
-            className="text-sm pb-5"
+            className="text-md pb-5"
             dangerouslySetInnerHTML={{ __html: props.text }}
           ></div>
           {props.image && (
-            <img src={props.image} className="w-7/12 pb-5" alt="" />
+            <img src={props.image} className="w-7/12 pb-5 rounded-xl" alt="" />
           )}
           <div className="flex justify-between">
             <div className="flex items-center gap-4 text-slate-500">
               <FontAwesomeIcon icon={faComment} className="text-lg " />
-              <div className="text-sm">100</div>
+              <div className="text-lg">{props.comment}</div>
             </div>
             <div className="flex items-center gap-4 text-slate-500">
               <FontAwesomeIcon icon={faRetweet} className="text-lg" />
-              <div className="text-sm">45</div>
+              <div className="text-lg">0</div>
             </div>
             <div className="flex items-center gap-4 text-slate-500">
               <FontAwesomeIcon
@@ -54,11 +54,11 @@ const Tweet = (props) => {
                 className="text-lg"
                 onClick={handleLikes}
               />
-              <div className="text-sm">123</div>
+              <div className="text-lg">{props.likes}</div>
             </div>
             <div className="flex items-center gap-4 text-slate-500">
               <FontAwesomeIcon icon={faChartSimple} className="text-lg" />
-              <div className="text-sm">10.2k</div>
+              <div className="text-lg">0</div>
             </div>
             <FontAwesomeIcon
               icon={faDownload}
