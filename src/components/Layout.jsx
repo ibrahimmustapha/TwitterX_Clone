@@ -3,15 +3,12 @@ import SideBar from "./SideBar";
 
 const Layout = (props) => {
   return (
-    <div className=" flex h-screen max-w-7xl m-auto overflow-hidden">
-      <div className="flex justify-between gap-10">
-        <div className=" fixed h-screen overflow-y-auto">
+    <div className="max-w-7xl m-auto">
+      <div className="flex">
+        <div className=" w-1/4 left-0 top-0 h-screen overflow-y-auto max-w-7xl md:w-1/5 lg:w-1/4">
           <SideBar />
         </div>
-        <div className="w-1/2 mx-auto overflow-x-hidden overflow-y-auto">{props.children}</div>
-        <div className=" fixed right-0 h-screen overflow-y-auto">
-          <RightBar />
-        </div>
+        <div className="flex-1">{props.children}</div>
       </div>
     </div>
   );

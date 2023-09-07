@@ -1,27 +1,94 @@
-import {
-  faCalendarAlt,
-  faFaceLaugh,
-  faImages,
-  faLocation,
-  faPoll,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-const icons = [faImages, faPoll, faFaceLaugh, faCalendarAlt, faLocation];
+import { addDoc, collection } from "firebase/firestore";
+import { uploadBytes, ref } from "firebase/storage";
+import { useState } from "react";
+import { db, storage } from "../firebase";
+import { v4 as uuidv4 } from "uuid";
 
 const ShareTweet = () => {
+  const [tweet, setTweet] = useState("");
+  const [file, setFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [image, setImage] = useState("");
+  const name = localStorage.getItem("name");
+  const photo = localStorage.getItem("img");
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+
+    if (selectedFile) {
+      setFile(selectedFile);
+
+      // Create a FileReader to read and display the image
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target.result);
+      };
+      reader.readAsDataURL(selectedFile);
+    } else {
+      setFile(null);
+      setImagePreview(null);
+    }
+  };
+
+  const handleTweet = async () => {
+    try {
+      const timestamp = new Date();
+      const docRef = collection(db, "tweets");
+      const uid = uuidv4();
+      const tweetData = {
+        text: tweet,
+        uid: uid.toString(),
+        name: name.toString(),
+        username: name.split(" ").join("").toLocaleLowerCase(),
+        avatar: photo.toString(),
+        photo: "",
+        video: "",
+        date: timestamp,
+        like: 0,
+        comments: [],
+      };
+
+
+      // Check if a file is selected
+      if (file) {
+        const storageRef = ref(storage, "tweet_files/" + file.name);
+
+        // Upload the file
+        await uploadBytes(storageRef, file);
+
+        // Update tweetData with the file URL
+        tweetData.photo = `https://firebasestorage.googleapis.com/v0/b/twitterx-clone-7410c.appspot.com/o/tweet_files%2F${file.name}?alt=media&token=888e9534-fa82-48da-ab3a-a105c12312b4`;
+
+        // Reset the file input
+        document.getElementById("fileInput").value = "";
+      }
+
+        // Add the tweet to Firestore
+        await addDoc(docRef, tweetData);
+
+        setTweet("");
+        setImagePreview(null);
+        setFile(null);
+
+      console.log("Tweet uploaded successfully.");
+    } catch (error) {
+      console.log("Something happened: ", error);
+    }
+  };
   return (
     <div className="">
       <div className="flex gap-5 items-start px-5">
         <img
           className="w-10 h-10 rounded-full"
-          src="https://ibrahimdotcode.netlify.app/static/media/pic5.a22e9a826aa52809497e.jpeg"
+          src={photo}
           alt="profile_image"
         />
         <div>
           <textarea
-            className="w-full h-20 bg-[#15202b]"
+            className=" w-full h-24 bg-[#15202b]"
             placeholder="What is Happening?!"
+            onChange={(e) => setTweet(e.target.value)}
+            value={tweet}
             name=""
             id=""
             cols="30"
@@ -29,13 +96,32 @@ const ShareTweet = () => {
           ></textarea>
         </div>
       </div>
-      <div className="flex justify-between gap-4 items-center border-b-[1px] py-3 pl-20 pr-5 border-slate-600">
-        <div className="flex gap-4">
-          {icons.map((icon) => (
-            <FontAwesomeIcon icon={icon} className="text-xl text-blue-400" />
-          ))}
+      <div>
+        <div className="flex justify-between gap-4 items-center border-b-[1px] py-3 pl-20 pr-5 border-slate-600">
+          <div className="flex gap-4">
+            <input
+              id="fileInput"
+              type="file"
+              className="w-7/12"
+              onChange={handleFileChange}
+            />
+          </div>
+          <div
+            onClick={handleTweet}
+            className="px-7 py-2 rounded-full bg-blue-400 cursor-pointer"
+          >
+            Post
+          </div>
         </div>
-        <div className="px-7 py-2 rounded-full bg-blue-400">Post</div>
+        <div>
+          {imagePreview && (
+            <img
+              src={imagePreview}
+              alt="Preview"
+              className=" w-1/2 h-1/2 p-5 rounded-xl"
+            />
+          )}
+        </div>
       </div>
     </div>
   );
