@@ -27,8 +27,8 @@ const Tweet = (props) => {
         />
         <div>
           <div className="flex gap-3 items-center pb-1 pt-1">
-            <div className=" text-[14.5px] font-semibold">{props.name}</div>
-            <div className=" text-slate-500 text-sm">
+            <div className=" text-[14.5px] font-semibold line-clamp-1">{props.name}</div>
+            <div className=" text-slate-500 text-sm line-clamp-1">
               @{props.username} · {props.date}
             </div>
           </div>
@@ -37,7 +37,7 @@ const Tweet = (props) => {
             dangerouslySetInnerHTML={{ __html: props.text }}
           ></div>
           {props.image && (
-            <img src={props.image} className="w-7/12 pb-5 rounded-xl" alt="" />
+            <img src={props.image} className="md:w-8/12 w-full  pb-5 rounded-xl" alt="" />
           )}
           <div className="flex justify-between">
             <div className="flex items-center gap-4 text-slate-500">

@@ -8,7 +8,6 @@ const ShareTweet = () => {
   const [tweet, setTweet] = useState("");
   const [file, setFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  const [image, setImage] = useState("");
   const name = localStorage.getItem("name");
   const photo = localStorage.getItem("img");
 
@@ -84,7 +83,7 @@ const ShareTweet = () => {
         />
         <div>
           <textarea
-            className=" w-full h-24 bg-[#15202b]"
+            className=" w-full h-24 bg-[#15202b] focus:outline-none"
             placeholder="What is Happening?!"
             onChange={(e) => setTweet(e.target.value)}
             value={tweet}
@@ -105,9 +104,14 @@ const ShareTweet = () => {
             />
           )}
         </div>
-        <div className="flex justify-between gap-4 items-center border-b-[1px] py-3 pl-20 pr-5 border-slate-600">
+        <div className="flex justify-between gap-4 items-center border-b-[1px] py-3 md:pl-20 md:pr-5 px-5 border-slate-600">
           <div className="flex gap-4">
-            <input id="fileInput" type="file" onChange={handleFileChange} />
+            <input className="block w-full text-sm text-slate-500
+      file:mr-4 file:py-2 file:px-4
+      file:rounded-full file:border-0
+      file:text-sm file:font-semibold
+      file:bg-violet-50 file:text-violet-700
+      hover:file:bg-violet-100" id="fileInput" type="file" onChange={handleFileChange} />
           </div>
           <div
             onClick={handleTweet}

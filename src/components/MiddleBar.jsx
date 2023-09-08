@@ -55,23 +55,25 @@ const MiddleBar = () => {
     }
   };
   return (
-    <div className="border-x-[1px] border-slate-600 w-9/12 ">
+    <div className="md:border-x-[1px] border-slate-600 md:w-12/12">
       <div className="p-5">Home</div>
       <ShareTweet />
-      {tweets.map((tweet) => (
-        <Tweet
-          key={tweet.uid}
-          name={tweet.name}
-          username={tweet.username}
-          avatar={tweet.avatar}
-          text={tweet.text}
-          date={formatDate(tweet.date)}
-          image={tweet.photo}
-          likes={tweet.like}
-          comment={tweet.comments.length}
-          uid={tweet.uid}
-        />
-      ))}
+      <div className="mb-12">
+        {tweets.map((tweet) => (
+          <Tweet
+            key={tweet.uid}
+            name={tweet.name}
+            username={tweet.username}
+            avatar={tweet.avatar}
+            text={tweet.text}
+            date={formatDate(tweet.date)}
+            image={tweet.photo}
+            likes={tweet.like}
+            comment={tweet.comments.length}
+            uid={tweet.uid}
+          />
+        ))}
+      </div>
     </div>
   );
 };
