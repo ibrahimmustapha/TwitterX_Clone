@@ -7,19 +7,23 @@ import {
   faRetweet,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { collection, doc, increment, updateDoc } from "firebase/firestore";
+import {
+  arrayRemove,
+  collection,
+  doc,
+  getDocs,
+  increment,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import { EditorState, convertFromRaw } from "draft-js";
 import { stateToHTML } from "draft-js-export-html";
+import { useEffect, useState } from "react";
 
 const Tweet = (props) => {
-  const handleLikes = async () => {
-    const ref = doc(collection(db, "tweets"), props.uid);
-    await updateDoc(ref, {
-      like: increment(1),
-    });
-  };
-
+  const [liked, setLiked] = useState(false);
   // Parse the JSON content state and convert it to EditorState
   const rawContentState = JSON.parse(props.text);
   const contentState = convertFromRaw(rawContentState);
@@ -36,6 +40,65 @@ const Tweet = (props) => {
       }
     },
   });
+
+  const handleLikes = async () => {
+    try {
+      const q = query(collection(db, "tweets"), where("uid", "==", props.uid));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        const tweetRef = doc.ref;
+        const username = localStorage
+          .getItem("name")
+          .split(" ")
+          .join("")
+          .toLocaleLowerCase();
+        // Get the likedBy array, or an empty array if it doesn't exist
+        const likedBy = doc.data().likedBy || [];
+
+        if (likedBy.includes(username)) {
+          // If the user has already liked the tweet, unlike it
+          updateDoc(tweetRef, {
+            // Remove the user from likedBy
+            likedBy: arrayRemove(username),
+          });
+          setLiked(false);
+        } else {
+          updateDoc(tweetRef, {
+            likedBy: [...likedBy, username],
+          });
+          setLiked(true);
+        }
+      });
+    } catch (error) {
+      console.log("like error", error);
+    }
+  };
+
+  // Check if the tweet is liked when the component mounts
+  useEffect(() => {
+    const username = localStorage.getItem('name')
+      .split(' ')
+      .join('')
+      .toLocaleLowerCase();
+    
+    const checkLiked = async () => {
+      try {
+        const q = query(collection(db, 'tweets'), where('uid', '==', props.uid));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          const likedBy = doc.data().likedBy || [];
+          if (likedBy.includes(username)) {
+            setLiked(true);
+          }
+        });
+      } catch (error) {
+        console.log('Like check error', error);
+      }
+    };
+
+    checkLiked();
+  }, [props.uid]);
+
 
   return (
     <div className="border-b-[1px] border-slate-500">
@@ -74,13 +137,15 @@ const Tweet = (props) => {
               <FontAwesomeIcon icon={faRetweet} className="text-lg" />
               <div className="text-lg">0</div>
             </div>
-            <div className="flex items-center gap-4 text-slate-500">
+            <div className="flex items-center gap-4">
               <FontAwesomeIcon
                 icon={faHeart}
-                className="text-lg"
+                className={`text-lg ${
+                  liked === false ? "text-slate-500" : "text-red-500"
+                }`}
                 onClick={handleLikes}
               />
-              <div className="text-lg">{props.likes}</div>
+              <div className="text-lg text-slate-500">{props.likes}</div>
             </div>
             <div className="flex items-center gap-4 text-slate-500">
               <FontAwesomeIcon icon={faChartSimple} className="text-lg" />

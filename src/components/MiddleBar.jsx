@@ -68,7 +68,7 @@ const MiddleBar = () => {
             text={tweet.text}
             date={formatDate(tweet.date)}
             image={tweet.photo}
-            likes={tweet.like}
+            likes={tweet.likedBy.length}
             comment={tweet.comments.length}
             uid={tweet.uid}
           />

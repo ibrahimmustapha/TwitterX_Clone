@@ -55,7 +55,7 @@ const PostModal = ({ isOpen, onClose }) => {
         photo: "",
         video: "",
         date: timestamp,
-        like: 0,
+        likedBy: [],
         comments: [],
       };
 

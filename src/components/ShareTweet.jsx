@@ -53,7 +53,7 @@ const ShareTweet = () => {
         photo: "",
         video: "",
         date: timestamp,
-        like: 0,
+        likedBy: [],
         comments: [],
       };
 
