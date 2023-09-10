@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useEffect, useState } from "react";
+import PostModal from "./Posts/PostModal";
 
 const sideLinks = [
   {
@@ -71,6 +72,16 @@ const SideBar = () => {
     getUser();
   }, [uid]);
 
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
   return (
     <div className="h- p-5 h-screen">
       <FontAwesomeIcon
@@ -84,16 +95,16 @@ const SideBar = () => {
             <div className="text-lg">{link.name}</div>
           </div>
         ))}
-        <div className="bg-blue-400 px-4 py-3 w-52 text-lg rounded-full text-center">
+        <div
+          onClick={openModal}
+          className="bg-blue-400 px-4 py-3 w-52 text-lg rounded-full text-center cursor-pointer"
+        >
           Post
         </div>
+        <PostModal isOpen={isModalOpen} onClose={closeModal} />
         <div className="flex gap-5 items-center my-20 cursor-pointer">
           <div>
-            <img
-              className="w-12 rounded-full"
-              src={user.image}
-              alt="profile"
-            />
+            <img className="w-12 rounded-full" src={user.image} alt="profile" />
           </div>
           <div>
             <div className="line-clamp-1">{user.name}</div>

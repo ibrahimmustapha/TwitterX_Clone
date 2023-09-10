@@ -9,6 +9,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { collection, doc, increment, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { EditorState, convertFromRaw } from "draft-js";
+import { stateToHTML } from "draft-js-export-html";
 
 const Tweet = (props) => {
   const handleLikes = async () => {
@@ -17,6 +19,24 @@ const Tweet = (props) => {
       like: increment(1),
     });
   };
+
+  // Parse the JSON content state and convert it to EditorState
+  const rawContentState = JSON.parse(props.text);
+  const contentState = convertFromRaw(rawContentState);
+  const tweetEditorState = EditorState.createWithContent(contentState);
+
+  // Convert the EditorState to HTML
+  const tweetHTML = stateToHTML(tweetEditorState.getCurrentContent(), {
+    customInlineFn: (element, self) => {
+      if (element.type === "emoji") {
+        const emoji = element.data;
+        return self.createHTMLSpan({
+          html: `<img src="${emoji.imageUrl}" alt="${emoji.native}" />`,
+        });
+      }
+    },
+  });
+
   return (
     <div className="border-b-[1px] border-slate-500">
       <div className="flex gap-5 p-4 items-start">
@@ -26,18 +46,24 @@ const Tweet = (props) => {
           alt="profile_image"
         />
         <div>
-          <div className="flex gap-3 items-center pb-1 pt-1">
-            <div className=" text-[14.5px] font-semibold line-clamp-1">{props.name}</div>
+          <div className="flex gap-1 items-center pb-1 pt-1">
+            <div className=" text-[14.5px] font-semibold line-clamp-1">
+              {props.name}
+            </div>
             <div className=" text-slate-500 text-sm line-clamp-1">
               @{props.username} · {props.date}
             </div>
           </div>
           <div
             className="text-md pb-5"
-            dangerouslySetInnerHTML={{ __html: props.text }}
+            dangerouslySetInnerHTML={{ __html: tweetHTML }}
           ></div>
           {props.image && (
-            <img src={props.image} className="md:w-8/12 w-full  pb-5 rounded-xl" alt="" />
+            <img
+              src={props.image}
+              className="md:w-8/12 w-full  pb-5 rounded-xl"
+              alt=""
+            />
           )}
           <div className="flex justify-between">
             <div className="flex items-center gap-4 text-slate-500">

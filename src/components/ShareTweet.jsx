@@ -3,11 +3,15 @@ import { uploadBytes, ref } from "firebase/storage";
 import { useState } from "react";
 import { db, storage } from "../firebase";
 import { v4 as uuidv4 } from "uuid";
+import { Editor, EditorState, convertToRaw } from "draft-js";
 
 const ShareTweet = () => {
   const [tweet, setTweet] = useState("");
   const [file, setFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
   const name = localStorage.getItem("name");
   const photo = localStorage.getItem("img");
 
@@ -34,8 +38,14 @@ const ShareTweet = () => {
       const timestamp = new Date();
       const docRef = collection(db, "tweets");
       const uid = uuidv4();
+
+      // Convert EditorState to raw content state and save it as JSON
+      const rawContentState = convertToRaw(editorState.getCurrentContent());
+      // const contentStateJson = JSON.stringify(rawContentState);
+      const tweetText = JSON.stringify(rawContentState);
+
       const tweetData = {
-        text: tweet,
+        text: tweetText,
         uid: uid.toString(),
         name: name.toString(),
         username: name.split(" ").join("").toLocaleLowerCase(),
@@ -64,7 +74,7 @@ const ShareTweet = () => {
       // Add the tweet to Firestore
       await addDoc(docRef, tweetData);
 
-      setTweet("");
+      setEditorState(EditorState.createEmpty());
       setImagePreview(null);
       setFile(null);
 
@@ -73,6 +83,7 @@ const ShareTweet = () => {
       console.log("Something happened: ", error);
     }
   };
+
   return (
     <div className="">
       <div className="flex gap-5 items-start px-5">
@@ -81,17 +92,8 @@ const ShareTweet = () => {
           src={photo}
           alt="profile_image"
         />
-        <div>
-          <textarea
-            className=" w-full h-24 bg-[#15202b] focus:outline-none"
-            placeholder="What is Happening?!"
-            onChange={(e) => setTweet(e.target.value)}
-            value={tweet}
-            name=""
-            id=""
-            cols="30"
-            rows="10"
-          ></textarea>
+        <div className="w-full">
+          <Editor editorState={editorState} onChange={setEditorState} />
         </div>
       </div>
       <div>
@@ -106,12 +108,18 @@ const ShareTweet = () => {
         </div>
         <div className="flex justify-between gap-4 items-center border-b-[1px] py-3 md:pl-20 md:pr-5 px-5 border-slate-600">
           <div className="flex gap-4">
-            <input className="block w-full text-sm text-slate-500
+            <input
+              accept="image/*"
+              className="block w-full text-sm text-slate-500
       file:mr-4 file:py-2 file:px-4
       file:rounded-full file:border-0
       file:text-sm file:font-semibold
       file:bg-violet-50 file:text-violet-700
-      hover:file:bg-violet-100" id="fileInput" type="file" onChange={handleFileChange} />
+      hover:file:bg-violet-100"
+              id="fileInput"
+              type="file"
+              onChange={handleFileChange}
+            />
           </div>
           <div
             onClick={handleTweet}
