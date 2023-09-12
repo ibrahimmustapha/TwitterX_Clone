@@ -45,21 +45,21 @@ const followData = [
   },
   {
     image:
-      "https://ibrahimdotcode.netlify.app/static/media/pic5.a22e9a826aa52809497e.jpeg",
+      "https://pbs.twimg.com/profile_images/1641965076541239296/YurC4gPG_400x400.jpg",
     name: "AlNassr",
     username: "@AlNassrFC_EN",
   },
   {
     image:
-      "https://ibrahimdotcode.netlify.app/static/media/pic5.a22e9a826aa52809497e.jpeg",
+      "https://pbs.twimg.com/profile_images/1017842860639555585/dr5thauD_400x400.jpg",
     name: "mr John",
     username: "@mrjohn1245",
   },
 ];
 const RightBar = () => {
   return (
-    <div className="h-full w-7/12">
-      <div className="pt-5">
+    <div className="p-5 mb-5">
+      <div className="">
         <div className="flex gap-4 items-center bg-mgray py-3 px-5 rounded-full mb-4">
           <FontAwesomeIcon icon={faSearch} className="text-xl text-slate-600" />
           <input type="text" placeholder="Search" className="bg-mgray" />
@@ -76,7 +76,6 @@ const RightBar = () => {
         </div>
         <div className="px-5 py-4 rounded-2xl bg-mgray">
           <div className="text-xl font-black pb-5">Trends for you</div>
-          <TrendCard />
           {trendList.map((list) => (
             <TrendCard type={list.type} name={list.name} posts={list.posts} />
           ))}

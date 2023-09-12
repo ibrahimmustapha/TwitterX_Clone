@@ -11,9 +11,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebase";
+import { db } from "../../firebase";
 import { useEffect, useState } from "react";
-import PostModal from "./Posts/PostModal";
+import PostModal from "../Posts/PostModal";
 
 const sideLinks = [
   {
@@ -56,6 +56,7 @@ const sideLinks = [
 
 const SideBar = () => {
   const uid = localStorage.getItem("uid");
+  const image = localStorage.getItem("img");
   const [user, setUser] = useState({});
   console.log(uid);
   useEffect(() => {
@@ -104,7 +105,7 @@ const SideBar = () => {
         <PostModal isOpen={isModalOpen} onClose={closeModal} />
         <div className="flex gap-5 items-center my-20 cursor-pointer">
           <div>
-            <img className="w-12 rounded-full" src={user.image} alt="profile" />
+            <img className="w-12 rounded-full" src={image} alt="profile" />
           </div>
           <div>
             <div className="line-clamp-1">{user.name}</div>

@@ -6,7 +6,6 @@ import { v4 as uuidv4 } from "uuid";
 import { Editor, EditorState, convertToRaw } from "draft-js";
 
 const ShareTweet = () => {
-  const [tweet, setTweet] = useState("");
   const [file, setFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [editorState, setEditorState] = useState(() =>

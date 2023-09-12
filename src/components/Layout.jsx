@@ -1,8 +1,6 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import RightBar from "./RightBar";
-import SideBar from "./SideBar";
-import { faBell, faEnvelope, faHome, faMailBulk, faMessage, faPlus, faSearch, faUserAlt } from "@fortawesome/free-solid-svg-icons";
+import SideBar from "./Nav/SideBar";
 import MobilePostButton from "./Posts/MobilePostButton";
+import BottomNav from "./Nav/BottomNav";
 
 const Layout = (props) => {
   return (
@@ -13,13 +11,7 @@ const Layout = (props) => {
         </div>
         <MobilePostButton />
         <div>
-          <div className="md:hidden  bg-mgray overflow-hidden rounded-t-lg p-4 fixed bottom-0 left-0 w-full flex justify-between">
-            <FontAwesomeIcon icon={faHome} className="text-white text-xl cursor-pointer active:text-blue-500" />
-            <FontAwesomeIcon icon={faSearch} className="text-white text-xl cursor-pointer active:text-blue-500" />
-            <FontAwesomeIcon icon={faBell} className="text-white text-xl cursor-pointer active:text-blue-500" />
-            <FontAwesomeIcon icon={faEnvelope} className="text-white text-xl cursor-pointer active:text-blue-500" />
-            <FontAwesomeIcon icon={faUserAlt} className="text-white text-xl cursor-pointer active:text-blue-500" />
-          </div>
+          <BottomNav />
         </div>
         <div className="flex-1 overflow-auto">{props.children}</div>
       </div>

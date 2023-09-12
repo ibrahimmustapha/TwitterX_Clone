@@ -1,12 +1,8 @@
 import SideBar from "../components/Auth/SideBar";
 import { faXTwitter } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { addDoc, auth, db, githubProvider, googleProvider } from "../firebase";
-import {
-  getRedirectResult,
-  signInWithPopup,
-  signInWithRedirect,
-} from "firebase/auth";
+import { auth, db, githubProvider, googleProvider } from "../firebase";
+import { getRedirectResult, signInWithRedirect } from "firebase/auth";
 import { collection, doc, setDoc } from "firebase/firestore";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -81,7 +77,7 @@ const SignUp = () => {
     };
 
     handleRedirectSignIn();
-  }, []);
+  }, [navigate]);
 
   if (accountToken) {
     return <Navigate replace to="/" />;

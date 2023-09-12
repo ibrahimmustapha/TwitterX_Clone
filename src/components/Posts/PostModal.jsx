@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 
 const PostModal = ({ isOpen, onClose }) => {
-  const [tweet, setTweet] = useState("");
   const [file, setFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [editorState, setEditorState] = useState(() =>

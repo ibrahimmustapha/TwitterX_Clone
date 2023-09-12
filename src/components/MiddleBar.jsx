@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
 import ShareTweet from "./ShareTweet";
 import Tweet from "./Tweet";
-import {
-  collection,
-  getDocs,
-  onSnapshot,
-  orderBy,
-  query,
-} from "firebase/firestore";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "../firebase";
+import SkeletonLoader from "./Loaders/SkeletonLoader";
 
 const MiddleBar = () => {
   const [tweets, setTweets] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     // db reference
     const ref = collection(db, "tweets");
@@ -25,55 +22,42 @@ const MiddleBar = () => {
         });
 
         setTweets(updatedTweets);
+        setLoading(false);
       } catch (error) {
         console.log("Error fetching tweets: ", error);
       }
     });
+    // unsubscribe();
   }, []);
 
-  // Function to format a Firestore timestamp into a date string (YYYY-MM-DD)
-  const formatDate = (timestamp) => {
-    const date = new Date(timestamp.seconds * 1000); // Convert Firestore timestamp to JavaScript Date
-    const currentDate = new Date();
-    const timeDifference = currentDate - date;
-
-    if (timeDifference < 60000) {
-      return "1m ago";
-    } else if (timeDifference < 3600000) {
-      const minutesAgo = Math.floor(timeDifference / 60000);
-      return `${minutesAgo}m ago`;
-    } else if (timeDifference < 86400000) {
-      const hoursAgo = Math.floor(timeDifference / 3600000);
-      return `${hoursAgo}h ago`;
-    } else if (timeDifference < 172800000) {
-      return "Yesterday";
-    } else if (timeDifference < 604800000) {
-      const daysAgo = Math.floor(timeDifference / 86400000);
-      return `${daysAgo}d ago`;
-    } else {
-      return date.toISOString().split("T")[0]; // Get the date part (YYYY-MM-DD)
-    }
-  };
   return (
     <div className="md:border-x-[1px] border-slate-600 md:w-12/12">
       <div className="p-5">Home</div>
       <ShareTweet />
-      <div className="mb-12">
-        {tweets.map((tweet) => (
-          <Tweet
-            key={tweet.uid}
-            name={tweet.name}
-            username={tweet.username}
-            avatar={tweet.avatar}
-            text={tweet.text}
-            date={formatDate(tweet.date)}
-            image={tweet.photo}
-            likes={tweet.likedBy.length}
-            comment={tweet.comments.length}
-            uid={tweet.uid}
-          />
-        ))}
-      </div>
+      {loading ? (
+        <div>
+          <SkeletonLoader />
+          <SkeletonLoader />
+          <SkeletonLoader />
+        </div>
+      ) : (
+        <div className="mb-12">
+          {tweets.map((tweet) => (
+            <Tweet
+              key={tweet.uid}
+              name={tweet.name}
+              username={tweet.username}
+              avatar={tweet.avatar}
+              text={tweet.text}
+              date={tweet.date}
+              image={tweet.photo}
+              likes={tweet.likedBy.length}
+              comment={tweet.comments.length}
+              uid={tweet.uid}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
