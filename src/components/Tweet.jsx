@@ -160,8 +160,8 @@ const Tweet = (props) => {
             )}
           </div>
           <div className="flex justify-between">
-            <div className="flex items-end gap-4 text-slate-500">
-              <MessageOutlined className="text-sate-500 text-lg" />
+            <div className="flex items-center gap-4 text-slate-500">
+              <MessageOutlined className="text-sate-500 text-[16px]" />
               <div className="text-lg">{props.comment}</div>
             </div>
             <div className="flex items-end gap-4 text-slate-500">

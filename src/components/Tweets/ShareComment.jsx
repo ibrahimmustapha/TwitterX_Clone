@@ -5,24 +5,44 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { db } from "../../firebase";
+import { db, storage } from "../../firebase";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Editor, EditorState, convertToRaw } from "draft-js";
 import { v4 as uuidv4 } from "uuid";
+import { ref, uploadBytes } from "firebase/storage";
 
 const ShareComment = () => {
   const uuid = useParams();
   const name = localStorage.getItem("name");
   const photo = localStorage.getItem("img");
+  const [file, setFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
 
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+
+    if (selectedFile) {
+      setFile(selectedFile);
+
+      // Create a FileReader to read and display the image
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target.result);
+      };
+      reader.readAsDataURL(selectedFile);
+    } else {
+      setFile(null);
+      setImagePreview(null);
+    }
+  };
+
   const handleComment = async () => {
     try {
       const timestamp = new Date();
-      const docRef = collection(db, "tweets");
       const uid = uuidv4();
 
       // Convert EditorState to raw content state and save it as JSON
@@ -44,6 +64,21 @@ const ShareComment = () => {
         likedBy: [],
         comments: [],
       };
+
+      // Check if a file is selected
+      if (file) {
+        const storageRef = ref(storage, "tweet_files/" + file.name);
+
+        // Upload the file
+        await uploadBytes(storageRef, file);
+
+        // Update tweetData with the file URL
+        tweetData.photo = `https://firebasestorage.googleapis.com/v0/b/twitterx-clone-7410c.appspot.com/o/tweet_files%2F${file.name}?alt=media&token=888e9534-fa82-48da-ab3a-a105c12312b4`;
+
+        // Reset the file input
+        document.getElementById("fileInput").value = "";
+      }
+
       tweetDoc.forEach((doc) => {
         const commentRef = doc.ref;
         const comments = doc.data().comments || [];
@@ -52,6 +87,8 @@ const ShareComment = () => {
         });
       });
       setEditorState(EditorState.createEmpty());
+      setImagePreview(null);
+      setFile(null);
     } catch (error) {
       console.log("Error fetching tweets: ", error);
     }
@@ -69,7 +106,30 @@ const ShareComment = () => {
         </div>
       </div>
       <div>
+      <div>
+          {imagePreview && (
+            <img
+              src={imagePreview}
+              alt="Preview"
+              className=" w-8/12 h-1/2 p-5 pl-20 rounded-xl"
+            />
+          )}
+        </div>
         <div className="flex justify-between gap-4 items-center border-b-[1px] py-3 md:pl-20 md:pr-5 px-5 border-slate-600">
+          <div className="flex gap-4">
+            <input
+              accept="image/*"
+              className="block w-full text-sm text-slate-500
+      file:mr-4 file:py-2 file:px-4
+      file:rounded-full file:border-0
+      file:text-sm file:font-semibold
+      file:bg-violet-50 file:text-violet-700
+      hover:file:bg-violet-100"
+              id="fileInput"
+              type="file"
+              onChange={handleFileChange}
+            />
+          </div>
           <div
             onClick={handleComment}
             className="px-7 py-2 rounded-full bg-blue-400 cursor-pointer"

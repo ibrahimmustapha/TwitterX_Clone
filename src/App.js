@@ -6,7 +6,7 @@ import FullTweet from "./pages/FullTweet";
 
 const App = () => {
   const accountToken = localStorage.getItem("account_token");
-  console.log("Account Token: " + accountToken);
+  // console.log("Account Token: " + accountToken);
   return (
     <Router>
       <Routes>
