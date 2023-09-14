@@ -11,10 +11,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../firebase";
+import { auth, db } from "../../firebase";
 import { useEffect, useState } from "react";
 import PostModal from "../Posts/PostModal";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { LoginOutlined } from "@ant-design/icons";
 
 const sideLinks = [
   {
@@ -80,6 +82,19 @@ const SideBar = () => {
     getUser();
   }, [uid]);
 
+  const handleSignOut = () => {
+    signOut(auth)
+      .then(() => {
+        localStorage.clear();
+        console.log("Logout successfully");
+        // eslint-disable-next-line no-restricted-globals
+        location.reload();
+      })
+      .catch((error) => {
+        console.log("error signing out: ", error);
+      });
+  };
+
   const [isModalOpen, setModalOpen] = useState(false);
 
   const openModal = () => {
@@ -110,7 +125,7 @@ const SideBar = () => {
           Post
         </div>
         <PostModal isOpen={isModalOpen} onClose={closeModal} />
-        <div className="flex gap-5 items-center my-20 cursor-pointer">
+        <div className="flex gap-5 items-center mt-20 cursor-pointer">
           <div>
             <img className="w-12 rounded-full" src={image} alt="profile" />
           </div>
@@ -118,6 +133,10 @@ const SideBar = () => {
             <div className="line-clamp-1">{user.name}</div>
             <div className=" text-slate-500">@{user.username}</div>
           </div>
+        </div>
+        <div className="flex gap-5 items-center my-5 justify-center cursor-pointer" onClick={handleSignOut}>
+          <LoginOutlined className="text-lg"/>
+          <div className="text-pink-600 text-lg">Logout</div>
         </div>
       </div>
     </div>
