@@ -28,11 +28,6 @@ const SignUp = () => {
   const handleGoogleSignUp = async () => {
     try {
       setLoading(true);
-      if (!!navigator.userAgent && /iPhone|iPod/.test(navigator.userAgent)) {
-        document
-          .querySelector('link[rel="manifest"]')
-          .setAttribute("rel", "no-on-ios");
-      }
       await signInWithRedirect(auth, googleProvider);
     } catch (error) {
       console.error("Google Sign Up Error:", error);
