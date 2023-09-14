@@ -1,4 +1,4 @@
-import { collection, doc, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 import { useEffect, useState } from "react";
 import { ArrowLeftOutlined } from "@ant-design/icons";
@@ -12,8 +12,6 @@ const FullTweet = () => {
   const navigate = useNavigate();
   const uid = useParams();
   const [tweet, setTweet] = useState([]);
-  const [comments, setComments] = useState([]);
-  const someArr = [];
 
   useEffect(() => {
     const fetchTweet = async () => {
@@ -21,15 +19,11 @@ const FullTweet = () => {
         const q = query(collection(db, "tweets"), where("uid", "==", uid.uid));
         const tweetDoc = await getDocs(q);
         const tempTweet = [];
-        const tempComment = [];
         tweetDoc.forEach((doc) => {
           const data = doc.data();
           tempTweet.push(data);
-          tempComment.push(data?.comments);
-          someArr.push(data?.comments);
         });
         setTweet(tempTweet);
-        setComments(tempComment[0]);
       } catch (error) {
         console.log("Error fetching tweets: ", error);
       }
@@ -37,8 +31,6 @@ const FullTweet = () => {
 
     fetchTweet();
   }, [uid]);
-
-  console.log("Comments here:: ", comments[0]);
 
   return (
     <Layout>

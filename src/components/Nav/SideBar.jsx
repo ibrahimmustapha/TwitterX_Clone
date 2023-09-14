@@ -14,6 +14,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useEffect, useState } from "react";
 import PostModal from "../Posts/PostModal";
+import { useNavigate, useParams } from "react-router-dom";
 
 const sideLinks = [
   {
@@ -55,8 +56,14 @@ const sideLinks = [
 ];
 
 const SideBar = () => {
+  const navigate = useNavigate();
   const uid = localStorage.getItem("uid");
   const image = localStorage.getItem("img");
+  const username = localStorage
+    .getItem("name")
+    .split(" ")
+    .join("")
+    .toLocaleLowerCase();
   const [user, setUser] = useState({});
   console.log(uid);
   useEffect(() => {
@@ -107,7 +114,7 @@ const SideBar = () => {
           <div>
             <img className="w-12 rounded-full" src={image} alt="profile" />
           </div>
-          <div>
+          <div onClick={() => navigate(`profile/${username}`)}>
             <div className="line-clamp-1">{user.name}</div>
             <div className=" text-slate-500">@{user.username}</div>
           </div>
