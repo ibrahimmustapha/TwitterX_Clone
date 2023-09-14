@@ -5,13 +5,13 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAPkBD6Uw2SbN5RjFk1im5KISKq3295zPM",
-  authDomain: "twitterx-clone-7410c.firebaseapp.com",
-  projectId: "twitterx-clone-7410c",
-  storageBucket: "twitterx-clone-7410c.appspot.com",
-  messagingSenderId: "481737700617",
-  appId: "1:481737700617:web:ef2f8ffd2904c71ef10fd8",
-  measurementId: "G-XWB6458DWB",
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
@@ -22,11 +22,4 @@ const googleProvider = new GoogleAuthProvider();
 const githubProvider = new GithubAuthProvider();
 const storage = getStorage(firebaseApp);
 
-export {
-  auth,
-  googleProvider,
-  githubProvider,
-  db,
-  firebaseApp,
-  storage,
-};
+export { auth, googleProvider, githubProvider, db, firebaseApp, storage };
