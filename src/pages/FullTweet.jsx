@@ -1,4 +1,10 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import { useEffect, useState } from "react";
 import { ArrowLeftOutlined } from "@ant-design/icons";
@@ -15,12 +21,11 @@ const FullTweet = () => {
   const accountToken = localStorage.getItem("account_token");
 
   useEffect(() => {
-    const fetchTweet = async () => {
+    const q = query(collection(db, "tweets"), where("uid", "==", uid.uid));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
       try {
-        const q = query(collection(db, "tweets"), where("uid", "==", uid.uid));
-        const tweetDoc = await getDocs(q);
         const tempTweet = [];
-        tweetDoc.forEach((doc) => {
+        querySnapshot.forEach((doc) => {
           const data = doc.data();
           tempTweet.push(data);
         });
@@ -28,14 +33,12 @@ const FullTweet = () => {
       } catch (error) {
         console.log("Error fetching tweets: ", error);
       }
-    };
-
-    fetchTweet();
+    });
   }, [uid]);
 
   if (accountToken === null) {
     return <Navigate replace to="/signin" />;
-  } 
+  }
 
   return (
     <Layout>

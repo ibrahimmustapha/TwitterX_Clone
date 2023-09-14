@@ -36,7 +36,7 @@ const Profile = () => {
 
   if (accountToken === null) {
     return <Navigate replace to="/signin" />;
-  } 
+  }
   return (
     <Layout>
       <div className="md:border-x-[1px] border-slate-600 h-full pb-20">
@@ -47,16 +47,12 @@ const Profile = () => {
           <ArrowLeftOutlined className=" text-xl" />
           <div className=" text-xl font-medium">{name}</div>
         </div>
-        <img
-          className="w-full"
-          src="https://pbs.twimg.com/profile_banners/1412524873319129100/1655071263/600x200"
-          alt="cover"
-        />
-        <div className=" border-b-[1px] border-slate-500 pb-5">
+        <div className="w-full bg-black h-44"></div>
+        <div className=" border-b-[1px] border-slate-500 pb-2">
           {user.map((data) => (
             <div>
               <img
-                className=" w-32 rounded-full mx-5 -mt-16 border-4 border-transparent"
+                className=" w-24 rounded-full mx-5 -mt-12 border-4 border-slate-800"
                 src={data?.avatar}
                 alt="profile"
               />
@@ -74,18 +70,29 @@ const Profile = () => {
                   </div>
                   <div className="flex gap-4 items-end text-slate-500">
                     <LinkOutlined className="text-xl" />
-                    <Link to={`spotify.com`}>spotify.com</Link>
+                    <Link to={`spotify.com`} className="text-blue-400">
+                      spotify.com
+                    </Link>
                   </div>
                   <div className="flex flex-wrap gap-4 items-end text-slate-500">
-                  <CalendarOutlined className="text-xl" />
+                    <CalendarOutlined className="text-xl" />
                     <div>
-                     
                       {data.joined?.toDate().toLocaleDateString("en-US", {
                         year: "numeric",
                         month: "short",
                         day: "numeric",
                       })}
                     </div>
+                  </div>
+                </div>
+                <div className="flex gap-10">
+                  <div className="flex gap-2 items-center">
+                    <div>500</div>
+                    <div className="text-slate-500">Following</div>
+                  </div>
+                  <div className="flex gap-2 items-center">
+                    <div>22.4k</div>
+                    <div className="text-slate-500">Followers</div>
                   </div>
                 </div>
               </div>
