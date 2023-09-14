@@ -23,12 +23,12 @@ const SignUp = () => {
       setLoading(false);
     }
   };
+
   // sign up with google
   const handleGoogleSignUp = async () => {
-    const userAgent = navigator.userAgent;
     try {
       setLoading(true);
-      if (userAgent.match(/(iPhone|iPad|iPod|Macintosh)/i)) {
+      if (!!navigator.userAgent && /iPhone|iPod/.test(navigator.userAgent)) {
         document
           .querySelector('link[rel="manifest"]')
           .setAttribute("rel", "no-on-ios");
