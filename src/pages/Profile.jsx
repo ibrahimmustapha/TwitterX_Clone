@@ -3,12 +3,11 @@ import {
   ArrowLeftOutlined,
   CalendarOutlined,
   CarOutlined,
-  ConsoleSqlOutlined,
   LinkOutlined,
 } from "@ant-design/icons";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { db } from "../firebase";
 import PersonalTweets from "../components/Tweets/PersonalTweets";
 
@@ -16,6 +15,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const name = localStorage.getItem("name");
   const uid = localStorage.getItem("uid");
+  const accountToken = localStorage.getItem("account_token");
   const [user, setUser] = useState([]);
 
   useEffect(() => {
@@ -34,7 +34,9 @@ const Profile = () => {
     });
   }, [uid]);
 
-  console.log(user);
+  if (accountToken === null) {
+    return <Navigate replace to="/signin" />;
+  } 
   return (
     <Layout>
       <div className="md:border-x-[1px] border-slate-600 h-full pb-20">

@@ -16,7 +16,8 @@ import { useEffect, useState } from "react";
 import PostModal from "../Posts/PostModal";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
-import { LoginOutlined } from "@ant-design/icons";
+import { Icon } from "@mui/material";
+import { LogoutOutlined } from "@mui/icons-material";
 
 const sideLinks = [
   {
@@ -135,7 +136,7 @@ const SideBar = () => {
           </div>
         </div>
         <div className="flex gap-5 items-center my-5 justify-center cursor-pointer" onClick={handleSignOut}>
-          <LoginOutlined className="text-lg"/>
+          <LogoutOutlined className="text-lg"/>
           <div className="text-pink-600 text-lg">Logout</div>
         </div>
       </div>

@@ -2,7 +2,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 import { useEffect, useState } from "react";
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import Layout from "../components/Layout";
 import Tweet from "../components/Tweet";
 import ShareComment from "../components/Tweets/ShareComment";
@@ -12,6 +12,7 @@ const FullTweet = () => {
   const navigate = useNavigate();
   const uid = useParams();
   const [tweet, setTweet] = useState([]);
+  const accountToken = localStorage.getItem("account_token");
 
   useEffect(() => {
     const fetchTweet = async () => {
@@ -31,6 +32,10 @@ const FullTweet = () => {
 
     fetchTweet();
   }, [uid]);
+
+  if (accountToken === null) {
+    return <Navigate replace to="/signin" />;
+  } 
 
   return (
     <Layout>
