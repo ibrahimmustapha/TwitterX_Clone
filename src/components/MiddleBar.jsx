@@ -4,8 +4,10 @@ import Tweet from "./Tweet";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "../firebase";
 import SkeletonLoader from "./Loaders/SkeletonLoader";
+import { useNavigate } from "react-router-dom";
 
 const MiddleBar = () => {
+  const navigate = useNavigate();
   const [tweets, setTweets] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -44,6 +46,7 @@ const MiddleBar = () => {
         <div className="mb-12">
           {tweets.map((tweet) => (
             <Tweet
+              onClick={() => navigate(`/${tweet.username}/status/${tweet.uid}`)}
               key={tweet.uid}
               name={tweet.name}
               username={tweet.username}

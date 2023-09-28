@@ -2,9 +2,10 @@ import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase";
 import Tweet from "../Tweet";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const PersonalTweets = () => {
+  const navigate = useNavigate();
   const [tweets, setTweets] = useState([]);
   const { username } = useParams();
 
@@ -31,6 +32,7 @@ const PersonalTweets = () => {
     <div>
       {tweets.map((tweet) => (
         <Tweet
+          onClick={() => navigate(`/${tweet.username}/status/${tweet.uid}`)}
           key={tweet.uid}
           name={tweet.name}
           username={tweet.username}

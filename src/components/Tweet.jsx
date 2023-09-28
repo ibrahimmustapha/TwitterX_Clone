@@ -19,11 +19,11 @@ import {
   MessageOutlined,
   RetweetOutlined,
 } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
 
 const Tweet = (props) => {
-  const navigate = useNavigate();
   const [liked, setLiked] = useState(false);
+  const [clicked, setClicked] = useState(true);
+
   // Parse the JSON content state and convert it to EditorState
   const rawContentState = JSON.parse(props.text);
   const contentState = convertFromRaw(rawContentState);
@@ -137,7 +137,7 @@ const Tweet = (props) => {
         />
         <div>
           <div
-            onClick={() => navigate(`/${props.username}/status/${props.uid}`)}
+            onClick={props.onClick}
           >
             <div className="flex gap-1 items-center pb-1 pt-1">
               <div className=" text-[14.5px] font-semibold line-clamp-1">
