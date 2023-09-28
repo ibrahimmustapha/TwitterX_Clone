@@ -22,7 +22,6 @@ import {
 
 const Tweet = (props) => {
   const [liked, setLiked] = useState(false);
-  const [clicked, setClicked] = useState(true);
 
   // Parse the JSON content state and convert it to EditorState
   const rawContentState = JSON.parse(props.text);

@@ -63,14 +63,14 @@ const Profile = () => {
                   Software Developer🐢• Student && Technical writer → Become a
                   better developer through my tweets | DMs are open
                 </div>
-                <div className="flex gap-10 items-end my-3">
-                  <div className="flex gap-4 items-end text-slate-500">
+                <div className="flex md:gap-10 gap-5 items-end my-3 flex-wrap">
+                  <div className="flex gap-3 items-end text-slate-500">
                     <CarOutlined className="text-xl" />
                     Accra, Ghana
                   </div>
                   <div className="flex gap-4 items-end text-slate-500">
                     <LinkOutlined className="text-xl" />
-                    <Link to={`spotify.com`} className="text-blue-400">
+                    <Link to={`https://spotify.com`} className="text-blue-400">
                       spotify.com
                     </Link>
                   </div>

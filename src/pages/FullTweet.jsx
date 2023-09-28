@@ -18,6 +18,11 @@ const FullTweet = () => {
   const navigate = useNavigate();
   const uid = useParams();
   const [tweet, setTweet] = useState([]);
+  const username = localStorage
+  .getItem("name")
+  .split(" ")
+  .join("")
+  .toLocaleLowerCase();
   const accountToken = localStorage.getItem("account_token");
 
   useEffect(() => {
@@ -41,7 +46,7 @@ const FullTweet = () => {
   }
 
   return (
-    <Layout>
+    <Layout onClick={() => navigate(`profile/${username}`)}>
       <div className="md:border-x-[1px] border-slate-600 h-full pb-20">
         <div
           className="p-5 flex items-center gap-10"
